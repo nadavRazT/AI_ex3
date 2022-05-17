@@ -146,6 +146,12 @@ def have_competing_needs(a1, a2, mutex_props):
           returns true if p and q are mutex in the previous level
     """
     "*** YOUR CODE HERE ***"
+    for p in a1:
+        for q in a2:
+            if mutex_props.Pair(p, q):
+                return True
+
+    return False
 
 
 def mutex_propositions(prop1, prop2, mutex_actions_list):

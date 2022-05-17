@@ -233,7 +233,15 @@ def independent_pair(a1, a2):
     a1.is_pos_effect(p) returns true is p is in a1.get_add()
     a1.is_neg_effect(p) returns true is p is in a1.get_delete()
     """
-    "*** YOUR CODE HERE ***"
+    neg_a1 = a1.get_delete()
+    neg_a2 = a2.get_delete()
+    for p in neg_a1:
+        if a2.is_pre_cond(p) or a2.is_pos_effect(p):
+            return False
+    for p in neg_a2:
+        if a1.is_pre_cond(p) or a1.is_pos_effect(p):
+            return False
+    return True
 
 
 if __name__ == '__main__':

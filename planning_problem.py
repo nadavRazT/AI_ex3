@@ -68,7 +68,6 @@ class PlanningProblem:
 
         Note that a state *must* be hashable!! Therefore, you might want to represent a state as a frozenset
         """
-
         pg_next = PlanGraphLevel()
         pg_next.expand(self.graph[self.expanded])
         self.graph.append(pg_next)

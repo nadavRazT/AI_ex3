@@ -76,7 +76,6 @@ class GraphPlan(object):
 
         plan_solution = self.extract(self.graph, self.goal, level)
         # try to extract a plan since all of the goal propositions are in current graph level, and are not mutex
-
         while plan_solution is None:  # while we didn't extract a plan successfully
             level = level + 1
             self.no_goods.append([])

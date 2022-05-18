@@ -5,17 +5,16 @@ from plan_graph_level import PlanGraphLevel
 from pgparser import PgParser
 from action import Action
 
-from search import SearchProblem
-from search import a_star_search
-
-
-# except:
-#     try:
-#         from CPF.search import SearchProblem
-#         from CPF.search import a_star_search
-#     except:
-#         from CPF.search_win_34 import SearchProblem
-#         from CPF.search_win_34 import a_star_search
+try:
+    from search import SearchProblem
+    from search import a_star_search
+except:
+    try:
+        from CPF.search import SearchProblem
+        from CPF.search import a_star_search
+    except:
+        from CPF.search_win_34 import SearchProblem
+        from CPF.search_win_34 import a_star_search
 
 
 class PlanningProblem:
@@ -152,7 +151,8 @@ def max_level(state, planning_problem):
 
         level = level + 1
         pg_next = PlanGraphLevel()  # create new PlanGraph object
-        pg_next.expand_without_mutex(graph[level - 1])  # calls the expand function, which you are implementing in the PlanGraph class
+        pg_next.expand_without_mutex(
+            graph[level - 1])  # calls the expand function, which you are implementing in the PlanGraph class
         graph.append(pg_next)  # appending the new level to the plan graph
     return level
 
@@ -162,7 +162,6 @@ def level_sum(state, planning_problem):
     The heuristic value is the sum of sub-goals level they first appeared.
     If the goal is not reachable from the state your heuristic should return float('inf')
     """
-    "*** YOUR CODE HERE ***"
     level_sum = 0
     goal_dict = set()
     init_state = state
@@ -186,24 +185,21 @@ def level_sum(state, planning_problem):
             goal_dict.add(g)
 
     while planning_problem.goal_state_not_in_prop_layer(graph[level].get_proposition_layer().get_propositions()):
+        if is_fixed(graph, level):
+            return float('inf')
+
+        level = level + 1
+
+        pg_next = PlanGraphLevel()  # create new PlanGraph object
+        pg_next.expand_without_mutex(
+            graph[level - 1])  # calls the expand function, which you are implementing in the PlanGraph class
+        graph.append(pg_next)  # appending the new level to the plan graph
 
         level_prop = graph[level].get_proposition_layer().get_propositions()
         for g in planning_problem.goal:
             if g in level_prop and not g in goal_dict:
                 level_sum += level
                 goal_dict.add(g)
-
-        if is_fixed(graph, level):
-            return float('inf')
-            # this means we stopped the while loop above because we reached a fixed point in the graph.
-            #  nothing more to do, we failed!
-
-        level = level + 1
-
-
-        pg_next = PlanGraphLevel()  # create new PlanGraph object
-        pg_next.expand_without_mutex(graph[level - 1])  # calls the expand function, which you are implementing in the PlanGraph class
-        graph.append(pg_next)  # appending the new level to the plan graph
     return level_sum
 
 
